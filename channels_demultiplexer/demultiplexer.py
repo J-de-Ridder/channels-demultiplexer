@@ -47,13 +47,12 @@ class WebsocketDemultiplexer(AsyncJsonWebsocketConsumer):
             self._input_queues[stream] = MessageQueue()
 
     async def __call__(self, scope, receive, send):
-        await asyncio.wait(
-            [super().__call__(scope, receive, send)]
-            + [
-                consumer(scope, self._input_queues[stream].get, send,)
-                for stream, consumer in self._consumers.items()
-            ]
-        )
+        coroutines = [super().__call__(scope, receive, send)] + [
+            consumer(scope, self._input_queues[stream].get, send, )
+            for stream, consumer in self._consumers.items()
+        ]
+        tasks = [asyncio.create_task(coroutine) for coroutine in coroutines]
+        await asyncio.wait(tasks)
 
     async def connect(self):
         """

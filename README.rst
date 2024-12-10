@@ -22,7 +22,7 @@ channels-demultiplexer
    :target: https://codecov.io/gh/csdenboer/channels-demultiplexer
    :alt: Coverage
 
-(De)multiplexer for Django Channels 3 (and 2)
+(De)multiplexer for Django Channels 4, 3 (and 2)
 
 Functionality
 -------------
@@ -70,7 +70,7 @@ Add the demultiplexer to your Channels routing configuration:
 .. code-block:: python
 
     from channels.routing import ProtocolTypeRouter, URLRouter
-    from django.conf.urls import url
+    from django.urls import re_path
     from django.core.asgi import get_asgi_application
 
     from .demultiplexer import Demultiplexer
@@ -78,7 +78,7 @@ Add the demultiplexer to your Channels routing configuration:
     application = ProtocolTypeRouter({
         "http": get_asgi_application(),
         "websocket": URLRouter([
-            url(r"^/$", Demultiplexer.as_asgi()),
+            re_path(r"^/$", Demultiplexer.as_asgi()),
         ])
     })
 
@@ -96,7 +96,19 @@ Compatibility
 +--------------------+--------------------------------+
 | channels           |  channels_demultiplexer        |
 +====================+================================+
+| v4.x               | latest                         |
++--------------------+--------------------------------+
 | v3.x               | latest                         |
++--------------------+--------------------------------+
+| v2.x               | v1.0.1                         |
++--------------------+--------------------------------+
+
++--------------------+--------------------------------+
+| Django             |  channels_demultiplexer        |
++====================+================================+
+| v4.x               | latest                         |
++--------------------+--------------------------------+
+| v3.x               | v2.2.0                         |
 +--------------------+--------------------------------+
 | v2.x               | v1.0.1                         |
 +--------------------+--------------------------------+
